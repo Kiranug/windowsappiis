@@ -1,0 +1,48 @@
+trigger:
+- main
+
+variables:
+  k8sServiceConnection: 'myakscred' 
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: PublishArtifacts
+  displayName: Publish Kubernetes Manifests
+  jobs:
+  - job: Publish
+    displayName: Publish Kubernetes Manifests
+    pool: "Default"
+    steps:
+    - task: CopyFiles@2
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: 'kubernetes.yml'
+        TargetFolder: '$(Build.ArtifactStagingDirectory)'
+        OverWrite: true
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'kubernetes-manifest'
+        publishLocation: 'Container'
+
+- stage: DeployToAKS
+  displayName: Deploy to AKS
+  dependsOn: PublishArtifacts
+  jobs:
+  - job: Deploy
+    displayName: Deploy to AKS using Kubernetes Manifests
+    pool: "Default"
+    steps:
+    - checkout: self
+    - bash: |
+        echo "Deploying to AKS using pre-built image"
+      displayName: 'Debug Variables'
+     
+    - task: KubernetesManifest@1
+      inputs:
+        action: 'deploy'
+        connectionType: 'kubernetesServiceConnection'
+        kubernetesServiceConnection: 'myakscred'
+        namespace: 'default'
+        manifests: '$(System.DefaultWorkingDirectory)/kubernetes.yml'
