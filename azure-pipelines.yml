@@ -9,7 +9,8 @@ variables:
   manifestsPath: 'kubernetes.yml'
   k8sServiceConnection: 'myakscred' 
   tag: '$(Build.BuildId)'
-  vmImageName: 'windows-latest'
+  pool:
+  vmImage: 'windows-latest'
 
 stages:
 - stage: BuildAndPush
@@ -17,7 +18,6 @@ stages:
   jobs:
   - job: Build
     displayName: Build and Push Docker Image to ACR
-    pool: "Default"
     steps:
     - task: Docker@2
       displayName: Build and Push Docker Image
@@ -59,7 +59,6 @@ stages:
   jobs:
   - job: Deploy
     displayName: Deploy to AKS using Kubernetes Manifests
-    pool: "Default"
     steps:
     - checkout: self
     - bash: |
