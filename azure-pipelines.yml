@@ -9,7 +9,7 @@ variables:
   manifestsPath: 'kubernetes.yml'
   k8sServiceConnection: 'myakscred' 
   tag: '$(Build.BuildId)'
-  vmImageName: 'ubuntu-latest'
+  vmImageName: 'windows-latest'
 
 stages:
 - stage: BuildAndPush
