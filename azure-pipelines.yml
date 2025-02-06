@@ -42,8 +42,8 @@ stages:
       
     - task: CopyFiles@2
       inputs:
-        SourceFolder: '$(System.DefaultWorkingDirectory)/Kube-Manifest'
-        Contents: '**'
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: 'kubernetes.yml'
         TargetFolder: '$(Build.ArtifactStagingDirectory)'
         OverWrite: true
 
@@ -74,6 +74,6 @@ stages:
         connectionType: 'kubernetesServiceConnection'
         kubernetesServiceConnection: 'myakscred'
         namespace: 'default'
-        manifests: '$(System.DefaultWorkingDirectory)/Kube-Manifest/nodejs-app-deployment.yaml'
+        manifests: '$(System.DefaultWorkingDirectory)/kubernetes.yml'
         containers: 'kiranacrdevops.azurecr.io/winapp/caliiis:$(Build.BuildId)'
         imagePullSecrets: 'acrpullapp1'
