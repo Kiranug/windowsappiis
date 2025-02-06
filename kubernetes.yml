@@ -19,7 +19,7 @@ metadata:
 spec:
   containers:
   - name: windows
-    image: dockurr/windows
+    image: kiranacrdevops.azurecr.io/windows/winappjs
     env:
     - name: VERSION
       value: "11"
