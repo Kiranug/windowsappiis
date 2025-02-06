@@ -74,4 +74,4 @@ spec:
     protocol: UDP
   selector:
     name: windows
-  type: NodePort
+  type: LoadBalancer
